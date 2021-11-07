@@ -19,13 +19,15 @@ ppie.axis('equal')
 hist_arr = np.random.normal(0, 1, size=100)
 phist.hist(hist_arr, 50, histtype='stepfilled', alpha=0.75)
 
-theta = np.linspace(0., 2*np.pi, 20, endpoint=False)
+theta = np.linspace(0., 2 * np.pi, 20, endpoint=False)
 radii = np.random.random(20)
-width = np.pi/4*np.random.rand(20)
-bars = pbar.bar(theta, 10*radii, width=width, bottom=0.)
+width = np.pi / 4 * np.random.rand(20)
+bars = pbar.bar(theta, 10 * radii, width=width, bottom=0.)
 for r, b in zip(radii, bars):
     b.set_facecolor(np.random.random(3))
     b.set_alpha(0.45)
 
 figure.tight_layout()
-plt.show()
+
+if __name__ == "__main__":
+    plt.show()
