@@ -20,16 +20,22 @@ class AeNet(nn.Module):
                     nn.Linear(__pre, net_size)
                 )
                 break
-            self.__net.append(
-                torch.nn.Sequential(
-                    nn.Linear(__pre, net_size),
-                    nn.ReLU()
+            if i == len(net_list)//2 - 1:
+                self.__net.append(
+                    nn.Sequential(
+                        nn.Linear(__pre, net_size),
+                        nn.Sigmoid()
+                    )
                 )
-            )
+                self.__keynet=i
+            else:
+                self.__net.append(
+                    torch.nn.Sequential(
+                        nn.Linear(__pre, net_size),
+                        nn.ReLU()
+                    )
+                )
             __pre = net_size
-            if __min > net_size:
-                __min = net_size
-                self.__keynet += 1
 
         for i in range(0, len(self.__net)):
             setattr(self, 'layer' + str(i), self.__net[i])
