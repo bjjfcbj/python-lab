@@ -1,4 +1,5 @@
 # %%
+
 import torch
 from torch.utils.data import DataLoader
 from torch.autograd import Variable
@@ -7,10 +8,11 @@ from kdd_oh_set import ohkdd
 from cnn_model import CNet
 
 # %%
+
 use_gpu = torch.cuda.is_available()
-train_data = ohkdd(test_size=0, use_gpu=use_gpu, data_path='final_train.npy', return_type=2)
+train_data = ohkdd(test_size=0, use_gpu=use_gpu, data_path='trible_train.npy', return_type=2)
 # valid_data = train_data.get_valid()
-test_data = ohkdd(test_size=0, use_gpu=use_gpu, data_path='final_test.npy',
+test_data = ohkdd(test_size=0, use_gpu=use_gpu, data_path='trible_test.npy',
                   tar_path='kdd99_oh_label_corrected.npy', return_type=2)
 
 train_loader = DataLoader(train_data, batch_size=32, shuffle=True, drop_last=True)
@@ -20,12 +22,14 @@ test_loader = DataLoader(test_data, batch_size=200, shuffle=True, drop_last=True
 print("use_gpu:{}".format(use_gpu))
 
 # %%
+
 net = CNet()
 loss_func = torch.nn.CrossEntropyLoss()
 opt = torch.optim.Adam(net.parameters(), lr=1e-5)
 
 
 # %%
+
 def accuracy(net, input_loader):
     tp = tn = fp = fn = 0
     for x, y in input_loader:
@@ -53,13 +57,14 @@ def accuracy(net, input_loader):
 
 
 # %%
+
 loss_count = []
 acc_count = []
 if use_gpu:
     net = net.cuda()
     loss_func = loss_func.cuda()
 print("training start...")
-for epoch in range(3):
+for epoch in range(5):
     for i, (x, y) in enumerate(train_loader):
         batch_x = Variable(x)
         batch_y = Variable(y)
@@ -71,7 +76,7 @@ for epoch in range(3):
         loss.backward()  # 回传
         opt.step()  # 更新模型参数
 
-        if i % 2000 == 0:  # 打点输出
+        if i % 5000 == 0:  # 打点输出
             # loss_count.append(loss)
             print("{}th{}:\t".format(epoch + 1, i), loss.item())
             acc = accuracy(net, test_loader)
@@ -81,6 +86,7 @@ for epoch in range(3):
     torch.save(net, r'kdd_cnn')  # 存储模型
 
 # %%
+
 plt.figure('cnn_acc')
 acc_count = list(map(list, zip(*acc_count)))
 plt.plot(acc_count[0], 'r', label='acc')
@@ -92,6 +98,7 @@ plt.ylim(0, 1.0)
 plt.show()
 
 # %%
+
 acc = accuracy(net, test_loader)
 acc_count.append(acc)
 print("acc:\t{}\nprecision:\t{}\nrecal:\t{}\nF1:\t{}".format(*acc))

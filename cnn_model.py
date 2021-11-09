@@ -40,7 +40,7 @@ class CNet(nn.Module):
         )
         self.full1 = nn.Linear(3 * 3 * 64, 100)
         self.full2 = nn.Linear(100, 20)
-        self.full3 = nn.Linear(20, 2)
+        self.full3 = nn.Linear(20, 5)
 
     def forward(self, x):
         x = self.conv1(x)

@@ -48,7 +48,7 @@ class ohkdd(Dataset):
             self.test_x = F.normalize(self.test_x)
         else:
             self.data_x = torch.unsqueeze(torch.from_numpy(data), dim=1).float()
-            self.data_y = torch.from_numpy(label.astype(int)).long().float()
+            self.data_y = torch.from_numpy(label.astype(int)).long()
 
         self.data_x = F.normalize(self.data_x)
         if torch.cuda.is_available() and use_gpu:

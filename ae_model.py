@@ -32,7 +32,7 @@ class AeNet(nn.Module):
                 self.__net.append(
                     torch.nn.Sequential(
                         nn.Linear(__pre, net_size),
-                        nn.ReLU()
+                        nn.Tanh()
                     )
                 )
             __pre = net_size
